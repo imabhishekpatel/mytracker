@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     #my apps
+    'coreApp.apps.CoreappConfig',
     'checkInCheckOut.apps.CheckincheckoutConfig',
 ]
 
