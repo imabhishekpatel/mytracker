@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check In/Out</title>
+</head>
+<body>
+    <h2>Check In/Out</h2>
+    {% if attendance %}
+        {% if not attendance.check_out_time %}
+            <p>You are currently checked in.</p>
+            <form id="check-out-form" method="post">
+                {% csrf_token %}
+                <button type="submit" name="action" value="check_out">Check Out</button>
+            </form>
+        {% else %}
+            <p>You are currently checked out.</p>
+            <form id="check-in-form" method="post">
+                {% csrf_token %}
+                <button type="submit" name="action" value="check_in">Check In</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p>You haven't checked in yet.</p>
+        <form id="check-in-form" method="post">
+            {% csrf_token %}
+            <button type="submit" name="action" value="check_in">Check In</button>
+        </form>
+    {% endif %}
+
+    <script>
+        document.getElementById('check-out-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendAction('check_out');
+        });
+
+        document.getElementById('check-in-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendAction('check_in');
+        });
+
+        function sendAction(action) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "check_in_out" %}', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    location.reload();  // Reload the page after successful action
+                }
+            };
+            xhr.send('action=' + action);
+        }
+    </script>
+</body>
+</html>

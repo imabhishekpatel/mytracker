@@ -22,6 +22,7 @@ admin.site.site_title = 'Tracker'
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path('api/checkInCheckOut/',include('checkInCheckOut.urls')),
+    path('checkInCheckOut/',include('checkInCheckOut.urls')),
+    path('',include('userLogin.urls')),
 
 ]
