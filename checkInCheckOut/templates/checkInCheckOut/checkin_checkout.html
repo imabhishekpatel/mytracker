@@ -55,11 +55,20 @@
         button:hover {
             background-color: #0056b3;
         }
+        .top-right-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Check In/Out</h2>
+        <a href="{% url 'attendance_history' %}" class="top-right-link">View Attendance History</a>
         {% if attendance %}
             {% if not attendance.check_out_time %}
                 <p>You are currently checked in since {{ attendance.check_in_time }}.</p>

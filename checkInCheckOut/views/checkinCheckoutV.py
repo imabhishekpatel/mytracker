@@ -26,6 +26,13 @@ def check_in_out(request):
 
     return render(request, 'checkInCheckOut/checkin_checkout.html', {'attendance': attendance})
 
+
+@login_required
+def attendance_history(request):
+    user = request.user  # Assuming the user is authenticated
+    attendance_history = Attendance.objects.filter(user=user)
+    return render(request, 'checkInCheckOut/attendance_history.html', {'attendance_history': attendance_history})
+
 # @login_required
 # def check_in_out(request):
 #     user = request.user

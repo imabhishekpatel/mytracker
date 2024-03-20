@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance History</title>
+</head>
+<body>
+    <h2>Attendance History</h2>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+    <ul>
+        {% for attendance in attendance_history %}
+            <li>Check In: {{ attendance.check_in_time }} - Check Out: {{ attendance.check_out_time }}</li>
+        {% empty %}
+            <li>No attendance history found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
