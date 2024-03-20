@@ -9,7 +9,7 @@ from datetime import datetime
 @login_required
 def check_in_out(request):
     user = request.user
-    attendance = Attendance.objects.filter(user=user).last()
+    attendance = Attendance.objects.filter(user=user,check_in_time__date=datetime.now().date()).last()
 
     if request.method == 'POST':
         action = request.POST.get('action')

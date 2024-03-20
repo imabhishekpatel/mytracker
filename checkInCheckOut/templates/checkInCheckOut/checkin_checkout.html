@@ -29,7 +29,19 @@
             margin-bottom: 20px;
         }
         p {
+            margin-bottom: 10px;
+        }
+        .time-info {
             margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+        .time-label {
+            font-weight: bold;
+        }
+        .live-hours {
+            font-weight: bold;
+            color: #007bff;
         }
         button {
             padding: 10px 20px;
@@ -51,12 +63,25 @@
         {% if attendance %}
             {% if not attendance.check_out_time %}
                 <p>You are currently checked in since {{ attendance.check_in_time }}.</p>
+                <div class="time-info">
+                    <p class="time-label">Today's Work Summary:</p>
+                    <p><span class="time-label">Checkin Time:</span> {{ attendance.check_in_time }}</p>
+                    <p><span class="time-label">Checkout Time:</span> -</p>
+                    <p><span class="time-label">Total Hours Worked:</span> -</p>
+                    <p><span class="time-label">Live Time Count:</span> <span id="live-time" class="live-hours"></span></p>
+                </div>
                 <form id="check-out-form" method="post">
                     {% csrf_token %}
                     <button type="submit" name="action" value="check_out">Check Out</button>
                 </form>
             {% else %}
-                <p>You are currently checked out.</p>
+                <p>You checked out at {{ attendance.check_out_time }}.</p>
+                <div class="time-info">
+                    <p class="time-label">Today's Work Summary:</p>
+                    <p><span class="time-label">Checkin Time:</span> {{ attendance.check_in_time }}</p>
+                    <p><span class="time-label">Checkout Time:</span> {{ attendance.check_out_time }}</p>
+                    <p><span class="time-label">Total Hours Worked:</span> {{ attendance.total_hours }}</p>
+                </div>
                 <form id="check-in-form" method="post">
                     {% csrf_token %}
                     <button type="submit" name="action" value="check_in">Check In</button>
@@ -94,6 +119,23 @@
             };
             xhr.send('action=' + action);
         }
+
+        // Calculate live time count
+        var checkinTime = new Date('{{ attendance.check_in_time }}');
+        var liveTimeElement = document.getElementById('live-time');
+
+        function updateLiveTime() {
+            var currentTime = new Date();
+            console.log('checkinTime ------------>>>>>>>>> ',checkinTime)
+            console.log('currentTime ------------>>>>>>>>> ',currentTime)
+            var timeDiff = Math.abs(currentTime - checkinTime);
+            var hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            var formattedTime = (hours < 10 ? "0" : "") + hours + "h " + (minutes < 10 ? "0" : "") + minutes + "m";
+            liveTimeElement.textContent = formattedTime;
+        }
+
+        setInterval(updateLiveTime, 1000); // Update every second
     </script>
 </body>
 </html>
